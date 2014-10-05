@@ -2,8 +2,10 @@
  * Created by psekar on 9/29/14.
  */
 import controllers.CustomRoutesService
+import controllers.security.CustomLoginTemplates
 import java.lang.reflect.Constructor
 import scala.collection.immutable.ListMap
+import securesocial.controllers.ViewTemplates
 import securesocial.core.providers._
 import securesocial.core.RuntimeEnvironment
 import service.DemoUser
@@ -25,6 +27,7 @@ object Global extends play.api.GlobalSettings {
     override lazy val routes = new CustomRoutesService()
     override lazy val userService: InMemoryUserService = new InMemoryUserService()
     override lazy val eventListeners = List(new MyEventListener())
+    override lazy val viewTemplates: ViewTemplates = new CustomLoginTemplates(this)
 
     override lazy val providers = ListMap(
       // oauth 2 client providers
@@ -34,6 +37,8 @@ object Global extends play.api.GlobalSettings {
       include(new GitHubProvider(routes, cacheService, oauth2ClientFor(GitHubProvider.GitHub))),
 */
       include(new GoogleProvider(routes, cacheService, oauth2ClientFor(GoogleProvider.Google)))
+
+
 /*
       include(new InstagramProvider(routes, cacheService, oauth2ClientFor(InstagramProvider.Instagram))),
       //include(new LinkedInOAuth2Provider(routes, cacheService,oauth2ClientFor(LinkedInOAuth2Provider.LinkedIn))),

@@ -6,8 +6,9 @@ import play.api.Logger
 import securesocial.core.{ RuntimeEnvironment, IdentityProvider }
 import service.DemoUser
 import securesocial.core.services.RoutesService
+import controllers.security.CustomLoginPage
 
-class CustomLoginController(implicit override val env: RuntimeEnvironment[DemoUser]) extends BaseLoginPage[DemoUser] {
+class CustomLoginController(implicit override val env: RuntimeEnvironment[DemoUser]) extends CustomLoginPage[DemoUser] {
   override def login: Action[AnyContent] = {
     Logger.debug("using CustomLoginController")
     super.login

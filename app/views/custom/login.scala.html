@@ -1,0 +1,45 @@
+@(loginForm: Form[(String,String)], errorMsg: Option[String] = None)(implicit request: RequestHeader, lang: Lang, env:securesocial.core.RuntimeEnvironment[_])
+
+@import securesocial.core.providers.UsernamePasswordProvider.UsernamePassword
+@import securesocial.core.AuthenticationMethod._
+
+@main(Messages("securesocial.login.title")) {
+<div class="page-header">
+    <h1>@Messages("securesocial.login.title")</h1>
+</div>
+
+@errorMsg.map { msg =>
+<div class="alert alert-error">
+    @Messages(msg)
+</div>
+}
+
+@request.flash.get("success").map { msg =>
+<div class="alert alert-info">
+    @msg
+</div>
+}
+
+@request.flash.get("error").map { msg =>
+<div class="alert alert-error">
+    @msg
+</div>
+}
+
+
+@defining( env.providers.values.filter( _.id != UsernamePassword) ) { externalProviders =>
+
+@if( externalProviders.size > 0 ) {
+<div class="clearfix">
+    <p>@Messages("securesocial.login.instructions")</p>
+    <p>
+        @for(p <- externalProviders) {
+        @if( p.authMethod == OAuth1 || p.authMethod == OAuth2 ) {
+        <button onClick="location.href='@env.routes.authenticationUrl(p.id)'" class="btn btn-google-plus"><i class="fa fa-goole-plus"></i>Connect with Google</button>
+        }
+        }
+    </p>
+</div>
+}
+}
+}
